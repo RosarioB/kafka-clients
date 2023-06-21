@@ -7,4 +7,4 @@ Before starting the client it must be run `docker-compose -f kafka-docker-compos
 
 There are different branches with different purposes:
 
-- ***producer***: it contains a basic producer which reads data from [this api](https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/) with a MqttClient.
+- ***producer***: it contains a basic producer which receives IOT data from [this api](https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/) with a MqttClient.
