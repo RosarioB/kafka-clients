@@ -13,7 +13,7 @@ It contains a basic producer which receives IOT data from [this api](https://dig
 
 To try the producer we have two possibilities:
 
-- one is to run the application (via java or the IDE itself) and setting `settings.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")` in the class `VehiclePositionproducer`.
+- The first is to run the application (via java or the IDE itself) and setting `settings.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")` in the class `VehiclePositionproducer`.
 
 - The second is to create a docker image from this project and the run the container.
 
