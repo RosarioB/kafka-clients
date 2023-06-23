@@ -5,4 +5,4 @@ The file docker-compose.yml, which contains the kafka infrastructure and all its
 
 There are different branches with different purposes:
 
-- ***consumer-producer***: basic producers which reads data from and a basic consumer which reads the data produced by the producer.
+- ***consumer-producer***: it contains a basic producers which reads data from which receives IOT data from [this api](https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/) and produces the events to the topic `vehicle-positions` and  a basic consumer which reads the data from the same topic and prints them to the stdout.
