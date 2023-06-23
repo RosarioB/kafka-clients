@@ -15,3 +15,13 @@ There are different branches with different purposes:
 
   `kafka-topics --create --bootstrap-server broker:9092 --partitions 6 --replication-factor 1 --topic vehicle-positions` to create the topic.
 
+  To try the producer we have two possibilities:
+  - one is to run the application (via java or the IDE itself) and setting `settings.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")` in the class `VehiclePositionproducer`.
+
+  - The second is to create a docker image from this project and the run the container.
+
+    To create the docker image we must first set `settings.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "broker:29092")` in the class `VehiclePositionproducer`. 
+
+    Then we need to go to the producer folder and run `docker image build -t rosariob/producer:v2 .`
+
+    To run the container with the previous created image we can execute `docker run  --rm -d --network confluent_kafka --name producer rosariob/producer:v2`.
