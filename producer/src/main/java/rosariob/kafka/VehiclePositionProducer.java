@@ -5,26 +5,26 @@ import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
-import org.slf4j.reload4j.Reload4jLoggerFactory;
-import org.slf4j.reload4j.Reload4jServiceProvider;
+import org.slf4j.LoggerFactory;
 
 public class VehiclePositionProducer {
+    private static Logger logger = LoggerFactory.getLogger(VehiclePositionProducer.class);
 
     public static void main(String[] args) throws MqttException {
-        System.out.println("*** Starting VP Producer ***");
+        logger.info("*** Starting VP Producer ***");
 
         Properties settings = new Properties();
         settings.put(ProducerConfig.CLIENT_ID_CONFIG, "vp-producer");
-        settings.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        settings.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092"); // localhost:9092 local, broker:29092 docker
         settings.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         settings.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 
         final KafkaProducer<String, String> producer = new KafkaProducer<>(settings);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("### Stopping VP Producer ###");
+            logger.info("### Stopping VP Producer ###");
             producer.close();
         }));
 

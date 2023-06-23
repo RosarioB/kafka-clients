@@ -1,5 +1,6 @@
 ---
 version: '2'
+name: 'confluent'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
@@ -10,6 +11,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - kafka
 
   broker:
     image: confluentinc/cp-server:7.4.0
@@ -26,6 +29,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
@@ -39,6 +43,8 @@ services:
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+    networks:
+      - kafka
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.4.0
@@ -52,6 +58,8 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker:29092'
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    networks:
+      - kafka
 
   connect:
     image: cnfldemos/cp-server-connect-datagen:0.5.3-7.1.0
@@ -82,6 +90,8 @@ services:
       CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
       CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
+    networks:
+      - kafka
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:7.4.0
@@ -105,6 +115,8 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
+    networks:
+      - kafka
 
   ksqldb-server:
     image: confluentinc/cp-ksqldb-server:7.4.0
@@ -128,6 +140,8 @@ services:
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
       KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
+    networks:
+      - kafka
 
   ksqldb-cli:
     image: confluentinc/cp-ksqldb-cli:7.4.0
@@ -138,6 +152,8 @@ services:
       - ksqldb-server
     entrypoint: /bin/sh
     tty: true
+    networks:
+      - kafka
 
   ksql-datagen:
     image: confluentinc/ksqldb-examples:7.4.0
@@ -160,6 +176,8 @@ services:
       STREAMS_BOOTSTRAP_SERVERS: broker:29092
       STREAMS_SCHEMA_REGISTRY_HOST: schema-registry
       STREAMS_SCHEMA_REGISTRY_PORT: 8081
+    networks:
+      - kafka
 
   rest-proxy:
     image: confluentinc/cp-kafka-rest:7.4.0
@@ -175,3 +193,9 @@ services:
       KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:29092'
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+    networks:
+      - kafka
+
+networks:
+  kafka:
+    driver: bridge
