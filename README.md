@@ -11,7 +11,7 @@ There are different branches with different purposes:
 
   Before starting the client we need to run `docker-compose -f kafka-docker-compose.yml up -d` inside the folder docker to start the kafka infrastructure with all its services.
 
-  After that we need to create the topic `vehicle-postions`. To do that we can open the bash sehll inside the `broker` container with: `docker exec -it broker bash ` and then execute: 
+  After that we need to create the topic `vehicle-postions`. To do that we can open the bash shell inside the `broker` container with: `docker exec -it broker bash ` and then execute: 
 
   `kafka-topics --create --bootstrap-server broker:9092 --partitions 6 --replication-factor 1 --topic vehicle-positions` to create the topic.
 
