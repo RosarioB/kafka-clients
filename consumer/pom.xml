@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>rosariob.kafka</groupId>
-    <artifactId>producer</artifactId>
+    <artifactId>consumer</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>kafka-producer</name>
-    <description>Kafka Producer</description>
+    <name>kafka-consumer</name>
+    <description>Kafka Consumer</description>
 
     <repositories>
         <repository>
@@ -27,11 +27,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.eclipse.paho</groupId>
-            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-            <version>1.2.5</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>

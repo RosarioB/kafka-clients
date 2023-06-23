@@ -4,4 +4,4 @@ COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 RUN ./mvnw dependency:resolve
 COPY src ./src
-CMD ["./mvnw", "compile", "exec:java", "-Dexec.mainClass=rosariob.kafka.VehiclePositionProducer"]
+CMD ["./mvnw", "compile", "exec:java", "-Dexec.mainClass=rosariob.kafka.VehiclePositionConsumer"]
