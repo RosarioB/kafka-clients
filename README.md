@@ -1,8 +1,12 @@
-# kafka-clients
-I have grouped in this repository some examples of producers, consumers trying to explore the different possibilities that Kafka has to offer. 
+# kafka-streams
+It contanins a producer and a consumer in the respective folders.
 
-The file docker-compose.yml, which contains the kafka infrastructure and all its services, has been used with all clients and it has been taken [here](https://github.com/confluentinc/cp-all-in-one/blob/7.4.0-post/cp-all-in-one/docker-compose.yml) .
+Before starting the client we need to run `docker-compose -f kafka-docker-compose.yml up -d` inside the folder docker to start the kafka infrastructure with all its services.
 
-There are different branches with different purposes:
+After that we need to create the topic `vehicle-positions`. To do that we can open the bash shell inside the `broker` container with: `docker exec -it broker bash ` and then execute: 
 
-- ***consumer-producer***: it contains a basic producers which reads data from which receives IOT data from [this api](https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/) and produces the events to the topic `vehicle-positions` and  a basic consumer which reads the data from the same topic and prints them to the stdout.
+`kafka-topics --create --bootstrap-server broker:9092 --partitions 6 --replication-factor 1 --topic vehicle-positions` to create the topic.
+
+Then we need to create the topic `vehicle-positions-oper-47` and this time we need to execute:
+
+`kafka-topics --create --bootstrap-server broker:9092 --partitions 6 --replication-factor 1 --topic vehicle-positions-oper-47` to create the topic.
