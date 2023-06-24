@@ -1,7 +1,9 @@
 package rosariob.kafka;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class VehicleValue {
     public String desi;
     public String dir;
