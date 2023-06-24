@@ -41,6 +41,9 @@ Eliminiamo il topic testing
 Per vedere i dettagli del topic possiamo usare:
     kafka-topics --bootstrap-server kafka:9092 --describe --topic testing
 
+Per vedere la lista dei topic
+    kafka-topics --bootstrap-server kafka:9092 --list
+
 KAFKA-CONSOLE-PRODUCER
     Entriamo nel container del broker
         docker exec -it broker bash 
