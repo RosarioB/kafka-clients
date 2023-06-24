@@ -11,7 +11,7 @@ After that we need to create the topic `vehicle-positions`. To do that we can op
 
 It contains a basic producer with Avro schema which receives IOT data from [this api](https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/) with a MqttClient and writes the data to the topic `vehicle-positions-avro`.
 
-After importing the project on Intellij you need to run the avro plugin avro:schema to create the necessary classes from the Avro schema files inside the folder avro.
+After importing the project in Intellij you need to run the avro plugin avro:schema to create the necessary classes from the Avro schema files inside the folder avro.
 
 To try the producer we have two possibilities:
 
@@ -29,6 +29,8 @@ To try the producer we have two possibilities:
 
 ## Consumer
  It contains a basic consumer which subscribes to the topic `vehicle-positions-avro` and prints the messages to the stdout.
+
+ After importing the project in Intellij you need to run the avro plugin avro:schema to create the necessary classes from the Avro schema files inside the folder avro.
 
  To try the consumer we have two possibilities:
  
