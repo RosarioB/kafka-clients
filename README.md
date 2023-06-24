@@ -1,4 +1,4 @@
-# branch consumer-producer
+# branch producer-consumer
 It contanins a producer and a consumer in the respective folders.
 
 Before starting the client we need to run `docker-compose -f kafka-docker-compose.yml up -d` inside the folder docker to start the kafka infrastructure with all its services.
