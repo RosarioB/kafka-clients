@@ -21,7 +21,7 @@ public class Subscriber implements MqttCallback {
     private String host = "ssl://mqtt.hsl.fi:8883";
     private String clientId = "MQTT-Java-Example";
     private String topic = "/hfp/v2/journey/ongoing/vp/#";
-    private String kafka_topic = "vehicle-positions";
+    private String kafka_topic = "vehicle-positions-avro";
     private MqttClient client;
 
     private KafkaProducer<PositionKey, PositionValue> producer;
