@@ -1,0 +1,108 @@
+NOTE KAFKA
+
+Il docker compose completo con tutti i servizi di kafka/confluent l'abbiamo preso qui:
+    https://github.com/confluentinc/cp-all-in-one/blob/7.4.0-post/cp-all-in-one/docker-compose.yml
+
+cd /Users/rosarioborgesi/Documents/workspaces/kafka-prova/docker
+
+docker-compose -f kafka-docker-compose.yml ps --> per vedere se i container sono up
+
+docker stats  --> per vedere l'uso di memoria e cpu dei container
+
+docker exec -it zookeeper bash --> per aprire la shell di bash nel container di zookeeper
+docker exec -it broker bash   --| per aprire la shell bash del container broker
+
+http://localhost:9021/ --> URL della UI del control center
+
+***************** TEST PER VERIFICARE SE IL BROKER E' PRESENTE SU ZOOKEEPER *****************
+    docker exec -it zookeeper bash -
+    zookeeper-shell zookeeper:2181 ls /brokers/ids
+    Risponde:
+
+    Connecting to zookeeper:2181
+
+    WATCHER::
+
+    WatchedEvent state:SyncConnected type:None path:null
+    [1]
+
+
+******************************** COMANDI DA RIGA DI COMANDO **********************************
+
+Entriamo nel container del broker
+    docker exec -it broker bash 
+
+Creiamo il topic testing
+    kafka-topics --bootstrap-server broker:9092 --create --partitions 1 --replication-factor 1 --topic testing 
+
+Eliminiamo il topic testing
+    kafka-topics --bootstrap-server localhost:9092 --topic testing --delete    
+
+Per vedere i dettagli del topic possiamo usare:
+    kafka-topics --bootstrap-server kafka:9092 --describe --topic testing
+
+KAFKA-CONSOLE-PRODUCER
+    Entriamo nel container del broker
+        docker exec -it broker bash 
+
+    CHIAVI NULLE
+        Per scrivere dei dati nel topic con chiavi nulle testing eseguiamo:  
+            kafka-console-producer --broker-list broker:9092 --topic testing
+    CHIAVI VALORIZZATE
+        Per scrivere degli eventi con le chiavi valorizzate usiamo:
+            kafka-console-producer --broker-list broker:9092 --topic testing --property parse.key=true --property key.separator=,
+    
+
+KAFKA-CONSOLE-CONSUMER
+    Entriamo nel container del broker
+        docker exec -it broker bash    
+
+    Per leggere i dati nel topic testing eseguiamo:
+        
+        CHIAVI NULLE
+            kafka-console-consumer --bootstrap-server broker:9092 --from-beginning --topic testing
+
+            questo consumer resta in ascolto quindi se continuiamo ad inserire dati nel topic il consumer ce li mostrerà
+
+        CHIAVI VALORIZZATE
+            kafka-console-consumer --bootstrap-server broker:9092 --from-beginning --topic testing --property print.key=true
+
+******************************** ESEMPIO PRODUCER **********************************
+    Entriamo nel container del broker
+        docker exec -it broker bash 
+
+    Creo il topic 
+        kafka-topics --create --bootstrap-server broker:9092 --partitions 6 --replication-factor 1 --topic vehicle-positions
+
+
+        docker image build -t rosariob/producer:v2 .    
+
+
+        docker run  --rm -d --network confluent_kafka --name producer rosariob/producer:v2
+
+
+
+********************************* COME FARE DEBUG SU KAFKA *****************************
+https://www.baeldung.com/kafka-docker-connection
+
+Per provare se riesco a scrivere su un topic sul nostro broker presente su un container docker possiamo fare così:
+
+        docker exec -it broker bash   
+        
+        kafka-console-producer --bootstrap-server broker:29092 --topic vehicle-positions
+
+Per leggere il contenuto di un topic sul nostro broker presente su un container docker possiamo fare così:
+
+        docker exec -it broker bash
+
+        kafka-console-consumer --bootstrap-server broker:29092 --from-beginning --topic vehicle-positions-oper-47 --property print.key=true
+
+Nota: nel parametro --bootstrap-server ho messo broker:29092 perché nel broker ho settato KAFKA_ADVERTISED_LISTENERS PLAINTEXT://broker:29092, PLAINTEXT_HOST://localhost:9092
+
+
+********************************** MAVEN WRAPPER *****************************************
+https://www.baeldung.com/maven-wrapper
+
+Come creare i files wrapper mvnw, mvnw.cmd e il folder .mvn
+
+mvn -N wrapper:wrapper
