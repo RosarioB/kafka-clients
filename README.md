@@ -1,5 +1,5 @@
 # scaling-kafka-streams
-This branch proves scaling of a Kafka Streams application
+This branch demonstrates the scaling of a Kafka Streams application.
 
 There are different folders which host different applications:
 1. docker: contains the docker compose file
