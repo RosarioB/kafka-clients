@@ -68,17 +68,19 @@ To execute the java producer we have two possibilities:
 
 ## Test
 The test aims at proving the Kafka Streams scalability. In order to prove the scalability we need to:
-1. start the docker producer
-2. start the Java producer
-3. start one instance of the kafka streams application.
+1. start the docker compose file
+2. start the Java producer or Python producer
+3. start one or multiple instance of the kafka streams application.
 
-Then we can check at the Confluent Control Center at http://localhost:9021/ at the section Consumer, there is a consumer
-group called streams-app-v.0.1.0. With one instance of the Kafka Streams application the message behind increase very quickly.
+Then we can check at the Confluent Control Center at http://localhost:9021/ in the section Consumer, where there is a consumer
+group called streams-app-v.0.1.0. With one instance of the Kafka Streams application the total message behind increase very quickly.
 
-At this point we can start other two instances of the Kafka Streams application and see that the messages behind will grow more 
-slowly as we add more instances.
-However since we have set only 3 partitions on the input topic `temperature-readings` if we add more then 3 partitions 
-we will not increase the scalability because the other instances would be idle.
+On the other hand if we start three instances of the Kafka Streams application we can see that the total messages behind will grow more 
+slowly and after 5 minutes of executions are roughly 400. 
+
+So as we add more instances the throughput increases but this is valid up to three instances, because 
+since we have set only 3 partitions on the input topic `temperature-readings` if we add more then 3 partitions 
+we will not increase the scalability as the other instances will be idle.
 
 ## KSQL
 Instead of running the Kafka Streams application we could have:
@@ -108,3 +110,7 @@ Instead of running the Kafka Streams application we could have:
 6. Inspect the aggregated temperature data as new records flow in from the producer.
 
     `SELECT station, max, min, avg FROM temp_agg_per_min;`
+
+When using KSQL on the Control Center we see 3 instances of consumer id for the stream `temp_agg_per_min` and 
+3 instances of consumer id for the stream `temperature-readings`. The total messages left behind are always less then 50, 
+so the KSQL scales in a very good manner.
