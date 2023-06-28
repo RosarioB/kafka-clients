@@ -109,3 +109,116 @@ https://www.baeldung.com/maven-wrapper
 Come creare i files wrapper mvnw, mvnw.cmd e il folder .mvn
 
 mvn -N wrapper:wrapper
+
+
+****************************************************** COMANDI KSQL CLI ******************************************************
+Per lanciare questi comandi bisogna prima entrare nel container contenente il server KSQL. 
+    Es: docker exec -it ksql-server bash
+
+e successivamente eseguire:
+    ksql http://ksql-server:8088
+
+***************** CREATE STREAM *****************
+    CREATE STREAM pageviews_original (
+            viewtime bigint,
+            userid varchar,
+            pageid varchar
+        ) WITH (kafka_topic='pageviews', value_format='DELIMITED');
+
+    Crea uno stream dal topic sottostante pageviews (Il topic dev'essere già presente su kafka). 
+
+    Si dice che lo stream è backed by the topic
+
+    NOTA:
+    Questa istruzione è diversa dall'uso di CREATE STREAM AS SELECT perché quest'ultimo crea uno stream a partire da una query SELECT.
+
+****** DESCRIBE **************
+
+    DESCRIBE pageviews_original; ci dà una descrizione dello stream/table 
+
+
+***************** CREATE TABLE *****************
+    CREATE TABLE users_original (
+      registertime BIGINT,
+      gender VARCHAR,
+      regionid VARCHAR,
+      userid VARCHAR
+    ) WITH
+    (kafka_topic='users', value_format='JSON', key = 'userid');
+
+    Creiamo una table dal topic users
+
+
+***************** SHOW STREAMS/TABLES *****************
+    SHOW STREAMS; ci restituisce la lista degli streams
+    
+    SHOW TABLES; ci restituisce la lista delle tables
+
+***************** SELECT *****************
+    SELECT * FROM pageviews_original LIMIT 10; --> select sullo stream
+
+    SELECT * FROM pageviews_original; --> questa query è infinita e per bloccarla serve ctrl + c.
+
+    SELECT * FROM users_original LIMIT 5; --> select sulla table
+
+    SELECT * FROM users_original; --> anche questa gira all'infinito e per uscire serve ctrl + c
+
+***************** WHERE *****************
+
+    SELECT * FROM pageviews_original WHERE userid='User_1' LIMIT 5;
+
+    SELECT * FROM pageviews_original WHERE pageid LIKE 'Page_6%' LIMIT 5; 
+
+    SELECT pageid, userid FROM pageviews_original LIMIT 5;
+
+***************** JOIN di uno Stream con una Table *****************
+    SELECT users_original.userid AS userid, pageid, regionid, gender
+    FROM pageviews_original LEFT JOIN users_original
+    ON pageviews_original.userid = users_original.userid
+     LIMIT 10;
+
+    Arricchiamo lo stream pageviews_original con dei dati dalla tabella users_original
+
+    SELECT s.country, s.name, t.temp
+    FROM mytemperatures t
+    LEFT JOIN weather_stations s ON t.station_id = s.id;
+
+***************** Creare Stream derivati *****************
+    Delle volte vogliamo creare streams o tables che derivano da stream e tables esistenti:
+
+    CREATE STREAM pageviews_female_1 AS
+    SELECT users_original.userid AS userid, pageid, regionid, gender
+    FROM pageviews_original LEFT JOIN users_original
+    ON pageviews_original.userid = users_original.userid
+    WHERE gender='FEMALE' AND regionid='Region_1';
+
+    Creiamo un nuovo Stream pageviews_female_1 da uno Stream già presente pageviews_original
+
+    Ovviamente su questo nuovo stream possiamo interrogarlo con le classiche SELECT, WHERE ecc..
+
+
+ ************* GROUP BY ********************
+
+    SELECT station_id, MAX(temp) AS tmax
+    FROM mytemperatures
+    GROUP BY station_id;   
+
+
+************** HAVING ***********************
+    SELECT station_id, COUNT( * ) AS nbr
+    FROM mytemperatures
+    GROUP BY station_id
+    HAVING COUNT( * )>=2;    
+
+**************** SET per Impostare proprietà sugli Streams *******************
+Una volta entrati nella CLI del server KSQL, quindi:
+
+     ksql http://ksql-server:8088
+
+Potremmo ad esempio volere impostare che tutti gli Streams siano letti dall'inizio. Per fare ciò usiamo SET     
+
+    SET 'auto.offset.reset' = 'earliest';
+
+***************** PRINT serve a vedere il contenuto di un topic in KSQL **************
+
+    PRINT 'stations' FROM BEGINNING;
