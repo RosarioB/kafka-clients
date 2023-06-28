@@ -9,6 +9,8 @@ There are different branches with different purposes:
 
 - ***producer-consumer-avro***: it is the same couple of producer and consumer of the precedent branch but this tijme it has been introduced Avro to handle the schema.
 
-- **kafka-streams***: contains a Kafka Streams applications and the same producer of the branch producer-consumer. The Kafka Streams applications reads the data from a topic Kafka, performs some transformations and then writes the output to another Kafka topic. The producer it is used just to import some data inside the kafka cluster and allows us to test the Kafka Streams applications.
+- ***kafka-streams***: contains a Kafka Streams applications and the same producer of the branch producer-consumer. The Kafka Streams applications reads the data from a topic Kafka, performs some transformations and then writes the output to another Kafka topic. The producer it is used just to import some data inside the kafka cluster and allows us to test the Kafka Streams applications.
+
+- ***scaling-kafka-streams***: it is useful to demonstrate how a Kafka Streaqms application can be scaled.
 
 Each branch has its own README files which explains in details what the applications have been developed for and how to use them.
