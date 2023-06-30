@@ -1,0 +1,18 @@
+insert into operators(id, name) values(6, 'Oy Pohjolan Liikenne Ab');
+insert into operators(id, name) values(12, 'Helsingin Bussiliikenne Oy');
+insert into operators(id, name) values(17, 'Tammelundin Liikenne Oy');
+insert into operators(id, name) values(18, 'Pohjolan Kaupunkiliikenne Oy');
+insert into operators(id, name) values(19, 'Etelä-Suomen Linjaliikenne Oy');
+insert into operators(id, name) values(20, 'Bus Travel Åbergin Linja Oy');
+insert into operators(id, name) values(21, 'Bus Travel Oy Reissu Ruoti');
+insert into operators(id, name) values(22, 'Nobina Finland Oy');
+insert into operators(id, name) values(36, 'Nurmijärven Linja Oy');
+insert into operators(id, name) values(40, 'HKL-Raitioliikenne');
+insert into operators(id, name) values(45, 'Transdev Vantaa Oy');
+insert into operators(id, name) values(47, 'Taksikuljetus Oy');
+insert into operators(id, name) values(51, 'Korsisaari Oy');
+insert into operators(id, name) values(54, 'V-S Bussipalvelut Oy');
+insert into operators(id, name) values(55, 'Transdev Helsinki Oy');
+insert into operators(id, name) values(58, 'Koillisen Liikennepalvelut Oy');
+insert into operators(id, name) values(59, 'Tilausliikenne Nikkanen Oy');
+insert into operators(id, name) values(90, 'VR Oy');
