@@ -43,9 +43,8 @@ To try the stream application we have two possibilities:
 
   To run the container with the previous image we can execute `docker run  --rm -d --network confluent_kafka --name streams rosariob/streams:v2`
 
-To verify that the data is generated correctly we can get inside the broker container `docker exec -it broker bash` 
-
-and then launch a consumer subscribed to the topic `vehicle-positions-oper-47`, by executing:
+To verify that the data is generated correctly we can get inside the broker container `docker exec -it broker bash`  and then launch a consumer subscribed 
+to the topic `vehicle-positions-oper-47`, by executing:
 
 `kafka-console-consumer --bootstrap-server broker:9092 --from-beginning --topic vehicle-positions-oper-47 --property print.key=true`
   
