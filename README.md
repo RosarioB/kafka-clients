@@ -13,6 +13,24 @@ Then we need to create the topic `vehicle-positions-oper-47` and this time we ne
 
 `kafka-topics --create --bootstrap-server broker:9092 --partitions 6 --replication-factor 1 --topic vehicle-positions-oper-47` to create the topic.
 
+## Producer
+
+It contains a basic producer which receives IOT data from [this api](https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/) with a MqttClient.
+
+To try the producer we have two possibilities:
+
+- The first is to run the application (via java or the IDE itself) and setting `settings.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")` in the class `VehiclePositionproducer`.
+
+- The second is to create a docker image from this project and the run the container.
+
+  To create the docker image we must first set `settings.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "broker:29092")` in the class `VehiclePositionproducer`.
+
+  Then we need to go to the producer folder and run `docker image build -t rosariob/producer:v2 .`
+
+  To run the container with the previous image we can execute `docker run  --rm -d --network confluent_kafka --name producer rosariob/producer:v2`
+
+## Kafka Stream application
+
 To try the stream application we have two possibilities:
 
 - The first is to run the application (via java or the IDE itself) and setting `settings.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")` in the class `VehiclePositionTransformer`.
@@ -25,5 +43,9 @@ To try the stream application we have two possibilities:
 
   To run the container with the previous image we can execute `docker run  --rm -d --network confluent_kafka --name streams rosariob/streams:v2`
 
-After we have executed the streams application we can test it by running the producer in a similar way to the streams applications itself.
+To verify that the data is generated correctly we can get inside the broker container:
+
+`docker exec -it broker bash` and the launch a consumer subscribed to the topic `vehicle-positions-oper-47` :
+
+`kafka-console-consumer --bootstrap-server broker:9092 --from-beginning --topic vehicle-positions-oper-47 --property print.key=true`
   

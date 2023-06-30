@@ -6,13 +6,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="producer" />
+        <module name="streams" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="consumer" target="17" />
       <module name="consumer-avro" target="17" />
-      <module name="producer" target="17" />
       <module name="producer-avro" target="17" />
+      <module name="producer-java" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
