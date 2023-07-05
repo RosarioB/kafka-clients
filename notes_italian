@@ -222,3 +222,27 @@ Potremmo ad esempio volere impostare che tutti gli Streams siano letti dall'iniz
 ***************** PRINT serve a vedere il contenuto di un topic in KSQL **************
 
     PRINT 'stations' FROM BEGINNING;
+
+****  QUERY UTILI SU KSQL  ****
+         DROP TABLE  pg; per cancellare la tabella
+         DROP STREAM pg; per eliminare lo stream   
+
+         DESCRIBE pg; per vedere lo schema
+
+         TERMINATE <query_id> --> Per terminare una query. Quindi nel mio caso TERMINATE INSERTQUERY_17 (lo recuperi dallo SHOW QUERIES);
+
+         SHOW QUERIES; mostra tutte le query
+
+         SHOW STREAMS; mostra la lista degli streams
+
+         DESCRIBE CONNECTOR "Sink-Connector";
+
+         DROP CONNECTOR "Sink-Connector";
+
+         CREATE CONNECTOR se al posto di usare la REST API vuoi creare il connector all'interno di KSQL
+
+         RUN SCRIPT '/sql/ksql_script.sql';
+
+         PRINT 'pg-operators-filter' FROM BEGINNING;
+
+         SHOW CONNECTORS; per vedere la lista dei connettori
