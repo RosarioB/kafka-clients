@@ -13,6 +13,8 @@ There are different branches with different purposes:
 
 - ***scaling-kafka-streams***: it is useful to demonstrate how a Kafka Streaqms application can be scaled.
 
-- ***kafka-connect***: it uses a Kafka Connect JDBC source connector get the data from a Postgres database and import them inside a topic Kafka. 
+- ***kafka-connect***: it uses a Kafka Connect JDBC source connector get the data from a Postgres database and import them inside a topic Kafka.
+
+- ***ksql***: it uses a Kafka Connect JDBC source connector get the data from a Postgres database and import them inside a topic Kafka. Then transforms the data with KSQL and the result is uploaded to a MySQL database using a JDBC sink connector.  
 
 Each branch has its own README files which explains in details what the applications have been developed for and how to use them.
