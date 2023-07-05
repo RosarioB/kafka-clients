@@ -147,6 +147,8 @@ services:
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
       KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
+    volumes:
+      - "$PWD/sql:/sql"
     networks:
       - kafka
   
@@ -158,6 +160,22 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: "password"
+    volumes:
+      - "$PWD/sql:/sql"
+    networks:
+      - kafka
+
+  mysql:
+    image: mysql:8.0.33
+    hostname: mysql
+    container_name: mysql
+    restart: always
+    ports:
+      - "33600:3306"
+    environment:
+      MYSQL_DATABASE: mysql
+      MYSQL_USER: 'user'
+      MYSQL_ROOT_PASSWORD: "password"
     volumes:
       - "$PWD/sql:/sql"
     networks:

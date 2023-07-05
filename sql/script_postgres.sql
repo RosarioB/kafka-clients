@@ -1,3 +1,10 @@
+CREATE TABLE operators(
+    id int not null primary key,
+    name varchar(50) not null
+);
+
+ALTER USER postgres WITH PASSWORD 'password';
+
 insert into operators(id, name) values(6, 'Oy Pohjolan Liikenne Ab');
 insert into operators(id, name) values(12, 'Helsingin Bussiliikenne Oy');
 insert into operators(id, name) values(17, 'Tammelundin Liikenne Oy');

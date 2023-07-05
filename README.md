@@ -1,44 +1,44 @@
 # kafka-connect
-This project aims at using Kafka Connect with the JDBC connector to import inside the Kafka topic `pg-operators` the data
-from the operator table inside the postgres database.
+In the branch `kafka-connect` we imported the data from a postgres database into a Kafka topic by making use 
+of a source connector. In this branch we will add two more steps to it:
+- we will use ksql to perform a simple filtering on the data
+- then we will upload the filtered data to a mysql database using a sink connector. 
 
 This project contains three folders:
 - docker: which contains the docker compose file.
-- jars: which contains the jars of the [JDBC Connector](https://www.confluent.io/hub/confluentinc/kafka-connect-jdbc/)
-- sql: which contains the script sql used to populate the postgres database.
+- jars: which contains the jars of the [JDBC Connector](https://www.confluent.io/hub/confluentinc/kafka-connect-jdbc/). I have also added the jdbc driver for MySQL (mysql-connector-j-8.0.32.jar)
+- sql: which contains now three script: mysql_script.sql, ksql_script.sql, script_postgres.sql
 
 To run the project we need to
 1. run the docker compose file
-2. populate the postgres database
-3. configure Kafka connect to get the data from the postgres database
+2. set up the postgres database
+3. set up the mysql database
+3. configure the Kafka source connector to Postgres
+4. set up the ksql streams
+5. configure the Kafka sink connector to MySQL
 
-## Docker
+Please follow the following steps in the exact same order to make sure that everything will work fine.
+
+## 1. Docker
 To start the file kafka-docker-compose.yml we need to get inside the docker directory and run: `docker-compose -f kafka-docker-compose.yml up -d`
 
-## Postgres
-To enter in the postgres shell we can execute `docker exec -it postgres psql -U postgres`
+## 2. Postgres
+To enter the postgres cli we can execute `docker exec -it postgres psql -U postgres`
 
-Now we can create the `operators` table running:
+In the folder sql there is a file script.sql which creates and populates the `operators` table. 
 
-```
-CREATE TABLE operators(
-    id int not null primary key,
-    name varchar(50) not null
-);
-```
+To run this file we can execute: `\i sql/script_postgres.sql`
 
-We need to set the password for the user postgres with this command. `ALTER USER postgres WITH PASSWORD 'password'`
+## 3. MySQL
+To connect to MySQL cli we need to execute
 
-In the folder sql there is a file script.sql which is needed to populate the operators table. 
+`docker exec -it mysql mysql -u root -p` then we can enter `password` as password.
 
-To run this file we can execute: `\i sql/script.sql`
+Then we can execute the script `mysql_script.sql`:
 
-Notes:
-- To view the list of the table we can execute `\dt`
-- To view the list of databases we can execute `\l`
+`source sql/mysql_script.sql;` to create the table `filtered_operators`.
 
-## Configure the source connector
-
+## 4. Create the topics
 We need to create the topic `pg-operators`. To do that we have to get inside the broker container by executing:
 `docker exec -it broker bash`
 
@@ -52,6 +52,18 @@ kafka-topics \
     --replication-factor 1
 ```
 
+Then we need the topic `pg-operators-filter`
+
+```
+kafka-topics \
+    --bootstrap-server broker:29092 \
+    --create \
+    --topic pg-operators-filter \
+    --partitions 1 \
+    --replication-factor 1    
+```
+## 5. Create the source connector
+
 To add the JDBC source connector which allows Kafka Connect to import the data from our Postgres database into the pg-operators topic
 we need to make a POST request to the Kafka Connect REST API.
 
@@ -61,7 +73,7 @@ First we need to get inside the connect container with: `docker exec -it connect
 curl -s -X POST \
         -H "Content-Type: application/json" \
         --data '{
-            "name": "Operators-Connector",
+            "name": "Source-Connector",
             "config": {
                 "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
                 "connection.url": "jdbc:postgresql://postgres:5432/postgres",
@@ -82,66 +94,114 @@ curl -s -X POST \
         }' http://connect:8083/connectors
 ```
 
-And it should print:
-```
-{
-  "name": "Operators-Connector",
-  "config": {
-    "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
-    "connection.url": "jdbc:postgresql://postgres:5432/postgres",
-    "connection.user": "postgres",
-    "connection.password": "password",
-    "table.whitelist": "operators",
-    "mode": "incrementing",
-    "incrementing.column.name": "id",
-    "table.types": "TABLE",
-    "topic.prefix": "pg-",
-    "numeric.mapping": "best_fit",
-    "transforms": "createKey,extractInt",
-    "transforms.createKey.type": "org.apache.kafka.connect.transforms.ValueToKey",
-    "transforms.createKey.fields": "id",
-    "transforms.extractInt.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
-    "transforms.extractInt.field": "id",
-    "name": "Operators-Connector"
-  },
-  "tasks": [],
-  "type": "source"
-}
-```
+## 6. KSQL
+To enter the ksql cli we can run: `docker exec -it ksqldb-server ksql http://ksqldb-server:8088`
 
-Note: to delete the connector `curl -X DELETE http://connect:8083/connectors/Operators-Connector`
+Now we can execute the script that creates the streams `pg` from the topic `pg-operators` and `pgfilter` from the topic `pg-operators-filter`, 
+by executing `RUN SCRIPT '/sql/ksql_script.sql';`
 
-To verify that Kafka connect is importing record into the topic pg-operators we need to get inside the container schema-registry:
-`docker exec -it schema-registry bash` and the run:
+The topic `pg-operators-filter` is populated with the records from the topic `pg-operators` filtered by the name starting with B, by using a query `INSERT INTO`.
+
+At this time in the ksql shell if you run `select * from pg;` it should print:
 
 ```
-kafka-avro-console-consumer \
-      --bootstrap-server broker:29092 \
-      --property schema.registry.url=http://schema-registry:8081 \
-      --topic pg-operators \
-      --from-beginning \
-      --property print.key=true
++--------------------------------------+--------------------------------------+
+|ID                                    |NAME                                  |
++--------------------------------------+--------------------------------------+
+|6                                     |Oy Pohjolan Liikenne Ab               |
+|12                                    |Helsingin Bussiliikenne Oy            |
+|17                                    |Tammelundin Liikenne Oy               |
+|18                                    |Pohjolan Kaupunkiliikenne Oy          |
+|19                                    |Etelä-Suomen Linjaliikenne Oy         |
+|20                                    |Bus Travel Åbergin Linja Oy           |
+|21                                    |Bus Travel Oy Reissu Ruoti            |
+|22                                    |Nobina Finland Oy                     |
+|36                                    |Nurmijärven Linja Oy                  |
+|40                                    |HKL-Raitioliikenne                    |
+|45                                    |Transdev Vantaa Oy                    |
+|47                                    |Taksikuljetus Oy                      |
+|51                                    |Korsisaari Oy                         |
+|54                                    |V-S Bussipalvelut Oy                  |
+|55                                    |Transdev Helsinki Oy                  |
+|58                                    |Koillisen Liikennepalvelut Oy         |
+|59                                    |Tilausliikenne Nikkanen Oy            |
+|90                                    |VR Oy                                 |
 ```
 
-And this should be the output:
+And then if you run `select * from pgfilter;` it should print:
 
 ```
-6       {"id":6,"name":"Oy Pohjolan Liikenne Ab"}
-12      {"id":12,"name":"Helsingin Bussiliikenne Oy"}
-17      {"id":17,"name":"Tammelundin Liikenne Oy"}
-18      {"id":18,"name":"Pohjolan Kaupunkiliikenne Oy"}
-19      {"id":19,"name":"Etelä-Suomen Linjaliikenne Oy"}
-20      {"id":20,"name":"Bus Travel Åbergin Linja Oy"}
-21      {"id":21,"name":"Bus Travel Oy Reissu Ruoti"}
-22      {"id":22,"name":"Nobina Finland Oy"}
-36      {"id":36,"name":"Nurmijärven Linja Oy"}
-40      {"id":40,"name":"HKL-Raitioliikenne"}
-45      {"id":45,"name":"Transdev Vantaa Oy"}
-47      {"id":47,"name":"Taksikuljetus Oy"}
-51      {"id":51,"name":"Korsisaari Oy"}
-54      {"id":54,"name":"V-S Bussipalvelut Oy"}
-55      {"id":55,"name":"Transdev Helsinki Oy"}
-58      {"id":58,"name":"Koillisen Liikennepalvelut Oy"}
-59      {"id":59,"name":"Tilausliikenne Nikkanen Oy"}
-90      {"id":90,"name":"VR Oy"}
++--------------------------------------+--------------------------------------+
+|ID                                    |NAME                                  |
++--------------------------------------+--------------------------------------+
+|20                                    |Bus Travel Åbergin Linja Oy           |
+|21                                    |Bus Travel Oy Reissu Ruoti            |
 ```
+
+## 7. Create the sink connector
+As we did in the source connector we need to get to the bash shell of the `connect` container with: `docker exec -it connect bash`
+
+Then we need to run this CURL:
+
+```
+curl -s -X POST \
+        -H "Content-Type: application/json" \
+        --data '{
+            "name": "Sink-Connector3",
+            "config": {
+                "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+                "connection.url": "jdbc:mysql://mysql:3306/mysql",
+                "connection.user": "root",
+                "connection.password": "password",
+                "dialect.name": "MySqlDatabaseDialect",
+                "topics":"pg-operators-filter",
+                "group.id": "sink.group",
+                "key.converter": "io.confluent.connect.avro.AvroConverter",
+                "key.converter.schema.registry.url": "http://schema-registry:8081",
+                "value.converter": "io.confluent.connect.avro.AvroConverter",
+                "value.converter.schema.registry.url": "http://schema-registry:8081",
+                "table.name.format": "filtered_operators",
+                "auto.create": "true",
+                "insert.mode": "upsert",
+                "pk.fields": "id",
+                "pk.mode": "record_key"
+            }
+        }' http://connect:8083/connectors
+```
+## 8. Test the results
+
+To test that everything works we can connect to the mysql cli and then execute:
+```
+USE mysql;
+SELECT * FROM filtered_operators;
+```
+
+The result should be:
+```
++----+-----------------------------+
+| id | name                        |
++----+-----------------------------+
+| 20 | Bus Travel ?bergin Linja Oy |
+| 21 | Bus Travel Oy Reissu Ruoti  |
++----+-----------------------------+
+```
+
+To check if the upsert is working correctly we can connect to the ksql cli:
+`docker exec -it ksqldb-server ksql http://ksqldb-server:8088`:
+
+and insert a new value for the key 21 like this:
+`insert into pgfilter (id, name) values(21, 'Bus Travel by Rosario');`
+
+And now in the mysql container if we run: `SELECT * FROM filtered_operators;`
+we should find:
+
+```
++----+-----------------------------+
+| id | name                        |
++----+-----------------------------+
+| 20 | Bus Travel ?bergin Linja Oy |
+| 21 | Bus Travel by Rosario       |
++----+-----------------------------+
+```
+
+So the key 21 has been correctly updated.
