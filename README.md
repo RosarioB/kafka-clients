@@ -13,9 +13,9 @@ To run the project we need to
 1. run the docker compose file
 2. set up the postgres database
 3. set up the mysql database
-3. configure the Kafka source connector to Postgres
-4. set up the ksql streams
-5. configure the Kafka sink connector to MySQL
+4. configure the Kafka source connector to Postgres
+5. set up the ksql streams
+6. configure the Kafka sink connector to MySQL
 
 Please follow the following steps in the exact same order to make sure that everything will work fine.
 
