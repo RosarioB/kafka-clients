@@ -1,4 +1,4 @@
-# kafka-connect
+# ksql
 In the branch `kafka-connect` we imported the data from a postgres database into a Kafka topic by making use 
 of a source connector. In this branch we will add two more steps to it:
 - we will use ksql to perform a simple filtering on the data
