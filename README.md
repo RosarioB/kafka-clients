@@ -3,13 +3,13 @@ It contains a producer and a consumer in the respective folders.
 
 In this project we will use the Avro schema.
 
-After having imported the project inside the IDE (IntelliJ) we need to run the plugin avro:schema fro both producer and consumer in order to generate the Avro classes. We can do it inside Intellij.
+After having imported the project inside the IDE (IntelliJ) we need to run the plugin avro:schema for both producer and consumer in order to generate the Avro classes. We can do it inside Intellij.
 
 Before starting the client we need to run `docker-compose -f kafka-docker-compose.yml up -d` inside the folder docker to start the kafka infrastructure with all its services.
 
 After that we need to create the topic `vehicle-positions`. To do that we can open the bash shell inside the `broker` container with: `docker exec -it broker bash` and then execute: 
 
-`kafka-topics --create --bootstrap-server broker:9092 --partitions 6 --replication-factor 1 --topic vehicle-positions-avro` to create the topic.
+`kafka-topics --create --bootstrap-server broker:9092 --partitions 1 --replication-factor 1 --topic vehicle-positions-avro` to create the topic.
 
 ## Producer
 
