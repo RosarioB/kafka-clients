@@ -5,7 +5,7 @@ Before starting the client we need to run `docker-compose -f kafka-docker-compos
 
 After that we need to create the topic `vehicle-positions`. To do that we can open the bash shell inside the `broker` container with: `docker exec -it broker bash ` and then execute: 
 
-`kafka-topics --create --bootstrap-server broker:9092 --partitions 6 --replication-factor 1 --topic vehicle-positions` to create the topic.
+`kafka-topics --create --bootstrap-server broker:9092 --partitions 1 --replication-factor 1 --topic vehicle-positions` to create the topic.
 
 ## Producer
 
