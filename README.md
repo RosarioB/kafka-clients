@@ -37,3 +37,6 @@ To try the producer we have two possibilities:
     Then we need to go to the consumer folder and run `docker image build -t rosariob/consumer:v2 .`
 
     To run the container with the previous image we can execute `docker run  --rm -d --network confluent_kafka --name consumer rosariob/consumer:v2`
+
+## Notes
+To check in detail the Kafka cluster you can use [Kadeck](https://www.kadeck.com/) or the Confluent Control Center at http://localhost:9021.
