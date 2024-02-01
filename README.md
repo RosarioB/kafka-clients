@@ -126,6 +126,7 @@ At this time in the ksql shell if you run `select * from pg;` it should print:
 |58                                    |Koillisen Liikennepalvelut Oy         |
 |59                                    |Tilausliikenne Nikkanen Oy            |
 |90                                    |VR Oy                                 |
++--------------------------------------+--------------------------------------+
 ```
 
 And then if you run `select * from pgfilter;` it should print:
@@ -136,6 +137,7 @@ And then if you run `select * from pgfilter;` it should print:
 +--------------------------------------+--------------------------------------+
 |20                                    |Bus Travel Åbergin Linja Oy           |
 |21                                    |Bus Travel Oy Reissu Ruoti            |
++--------------------------------------+--------------------------------------+
 ```
 
 ## 7. Create the sink connector
