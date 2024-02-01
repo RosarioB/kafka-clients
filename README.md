@@ -47,4 +47,6 @@ To verify that the data is generated correctly we can get inside the broker cont
 to the topic `vehicle-positions-oper-47`, by executing:
 
 `kafka-console-consumer --bootstrap-server broker:9092 --from-beginning --topic vehicle-positions-oper-47 --property print.key=true`
-  
+
+## Notes
+To check in detail the Kafka cluster you can either use [Kadeck](https://www.kadeck.com/) or the Confluent Control Center at http://localhost:9021.
