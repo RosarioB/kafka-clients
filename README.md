@@ -205,3 +205,6 @@ we should find:
 ```
 
 So the key 21 has been correctly updated.
+
+## Notes
+To check in detail the Kafka cluster you can either use [Kadeck](https://www.kadeck.com/) or the Confluent Control Center at http://localhost:9021.
