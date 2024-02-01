@@ -145,3 +145,6 @@ And this should be the output:
 59      {"id":59,"name":"Tilausliikenne Nikkanen Oy"}
 90      {"id":90,"name":"VR Oy"}
 ```
+
+## Notes
+To check in detail the Kafka cluster you can either use [Kadeck](https://www.kadeck.com/) or the Confluent Control Center at http://localhost:9021.
