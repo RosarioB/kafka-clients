@@ -1,24 +1,13 @@
- SET 'auto.offset.reset' = 'earliest';
+SET 'auto.offset.reset' = 'earliest';
 
- CREATE STREAM pg(
+CREATE STREAM operators(
         id INTEGER KEY,
-        name STRING
+        company_name STRING,
+        nationality STRING,
+        capitalization BIGINT
 )
 WITH (
     KAFKA_TOPIC='pg-operators',
     KEY_FORMAT='AVRO',
     VALUE_FORMAT='AVRO'
 );
-
-CREATE STREAM pgfilter(
-    id INTEGER KEY,
-    name STRING
-)
-WITH (
-    KAFKA_TOPIC='pg-operators-filter',
-    KEY_FORMAT='AVRO',
-    VALUE_FORMAT='AVRO'
-);
-
-INSERT INTO pgfilter
-    SELECT * FROM pg WHERE name LIKE 'B%';

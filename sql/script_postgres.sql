@@ -1,25 +1,94 @@
-CREATE TABLE operators(
-    id int not null primary key,
-    name varchar(50) not null
+CREATE TABLE operators (
+    id SERIAL PRIMARY KEY,
+    company_name VARCHAR,
+    nationality VARCHAR,
+    capitalization INTEGER
 );
 
 ALTER USER postgres WITH PASSWORD 'password';
 
-insert into operators(id, name) values(6, 'Oy Pohjolan Liikenne Ab');
-insert into operators(id, name) values(12, 'Helsingin Bussiliikenne Oy');
-insert into operators(id, name) values(17, 'Tammelundin Liikenne Oy');
-insert into operators(id, name) values(18, 'Pohjolan Kaupunkiliikenne Oy');
-insert into operators(id, name) values(19, 'Etelä-Suomen Linjaliikenne Oy');
-insert into operators(id, name) values(20, 'Bus Travel Åbergin Linja Oy');
-insert into operators(id, name) values(21, 'Bus Travel Oy Reissu Ruoti');
-insert into operators(id, name) values(22, 'Nobina Finland Oy');
-insert into operators(id, name) values(36, 'Nurmijärven Linja Oy');
-insert into operators(id, name) values(40, 'HKL-Raitioliikenne');
-insert into operators(id, name) values(45, 'Transdev Vantaa Oy');
-insert into operators(id, name) values(47, 'Taksikuljetus Oy');
-insert into operators(id, name) values(51, 'Korsisaari Oy');
-insert into operators(id, name) values(54, 'V-S Bussipalvelut Oy');
-insert into operators(id, name) values(55, 'Transdev Helsinki Oy');
-insert into operators(id, name) values(58, 'Koillisen Liikennepalvelut Oy');
-insert into operators(id, name) values(59, 'Tilausliikenne Nikkanen Oy');
-insert into operators(id, name) values(90, 'VR Oy');
+INSERT INTO operators (company_name, nationality, capitalization) 
+VALUES 
+('Lufthansa', 'German', 250000000),
+('Air France', 'French', 300000000),
+('British Airways', 'British', 280000000),
+('KLM', 'Dutch', 320000000),
+('Ryanair', 'Irish', 200000000),
+('Deutsche Bahn', 'German', 400000000),
+('SNCF', 'French', 350000000),
+('Renfe', 'Spanish', 370000000),
+('Trenitalia', 'Italian', 340000000),
+('ÖBB', 'Austrian', 320000000),
+('American Airlines', 'American', 500000000),
+('Delta Air Lines', 'American', 550000000),
+('United Airlines', 'American', 520000000),
+('Southwest Airlines', 'American', 480000000),
+('JetBlue Airways', 'American', 450000000),
+('Amtrak', 'American', 420000000),
+('Alaska Airlines', 'American', 430000000),
+('Spirit Airlines', 'American', 410000000),
+('Frontier Airlines', 'American', 390000000),
+('Hawaiian Airlines', 'American', 380000000),
+('Emirates', 'UAE', 600000000),
+('Etihad Airways', 'UAE', 580000000),
+('Qatar Airways', 'Qatari', 560000000),
+('Singapore Airlines', 'Singaporean', 700000000),
+('Cathay Pacific', 'Hong Kong', 720000000),
+('Japan Airlines', 'Japanese', 680000000),
+('Korean Air', 'South Korean', 660000000),
+('Thai Airways', 'Thai', 640000000),
+('Qantas', 'Australian', 750000000),
+('Virgin Australia', 'Australian', 770000000),
+('Air New Zealand', 'New Zealand', 740000000),
+('SAS', 'Swedish', 360000000),
+('Finnair', 'Finnish', 330000000),
+('Aer Lingus', 'Irish', 310000000),
+('Swiss International Air Lines', 'Swiss', 290000000),
+('Austrian Airlines', 'Austrian', 270000000),
+('LOT Polish Airlines', 'Polish', 260000000),
+('Tap Air Portugal', 'Portuguese', 230000000),
+('Brussels Airlines', 'Belgian', 220000000),
+('Turkish Airlines', 'Turkish', 210000000),
+('EgyptAir', 'Egyptian', 80000000),
+('South African Airways', 'South African', 95000000),
+('Ethiopian Airlines', 'Ethiopian', 90000000),
+('Royal Air Maroc', 'Moroccan', 85000000),
+('Kenya Airways', 'Kenyan', 82000000),
+('Royal Jordanian', 'Jordanian', 61000000),
+('Gulf Air', 'Bahraini', 63000000),
+('Oman Air', 'Omani', 64000000),
+('Kuwait Airways', 'Kuwaiti', 66000000),
+('Biman Bangladesh Airlines', 'Bangladeshi', 67000000),
+('Air India', 'Indian', 68000000),
+('IndiGo', 'Indian', 70000000),
+('SpiceJet', 'Indian', 72000000),
+('AirAsia', 'Malaysian', 74000000),
+('Philippine Airlines', 'Philippine', 76000000),
+('Vietnam Airlines', 'Vietnamese', 78000000),
+('Garuda Indonesia', 'Indonesian', 80000000),
+('Lion Air', 'Indonesian', 82000000),
+('SriLankan Airlines', 'Sri Lankan', 84000000),
+('Malaysia Airlines', 'Malaysian', 86000000),
+('China Southern Airlines', 'Chinese', 88000000),
+('China Eastern Airlines', 'Chinese', 90000000),
+('Hainan Airlines', 'Chinese', 92000000),
+('Xiamen Airlines', 'Chinese', 94000000),
+('Shenzhen Airlines', 'Chinese', 96000000),
+('Juneyao Airlines', 'Chinese', 98000000),
+('Air China', 'Chinese', 100000000),
+('Cathay Dragon', 'Hong Kong', 102000000),
+('Beijing Capital Airlines', 'Chinese', 104000000),
+('Spring Airlines', 'Chinese', 106000000),
+('Shanghai Airlines', 'Chinese', 108000000),
+('China United Airlines', 'Chinese', 110000000),
+('Tianjin Airlines', 'Chinese', 112000000),
+('West Air', 'Chinese', 114000000),
+('Shandong Airlines', 'Chinese', 116000000),
+('Chengdu Airlines', 'Chinese', 118000000),
+('Hainan Airlines', 'Chinese', 120000000),
+('Hong Kong Airlines', 'Hong Kong', 122000000),
+('Air Macau', 'Macau', 124000000),
+('Tigerair Taiwan', 'Taiwanese', 126000000),
+('EVA Air', 'Taiwanese', 128000000),
+('Uni Air', 'Taiwanese', 130000000),
+('Far Eastern Air Transport', 'Taiwanese', 132000000);

@@ -165,22 +165,6 @@ services:
     networks:
       - kafka
 
-  mysql:
-    image: mysql:8.0.33
-    hostname: mysql
-    container_name: mysql
-    restart: always
-    ports:
-      - "33600:3306"
-    environment:
-      MYSQL_DATABASE: mysql
-      MYSQL_USER: 'user'
-      MYSQL_ROOT_PASSWORD: "password"
-    volumes:
-      - "$PWD/sql:/sql"
-    networks:
-      - kafka    
-
 networks:
   kafka:
     driver: bridge
