@@ -15,6 +15,8 @@ There are different branches with different purposes:
 
 - ***kafka-connect***: it uses a Kafka Connect JDBC source connector get the data from a Postgres database and import them inside a topic Kafka.
 
-- ***ksql***: it uses a Kafka Connect JDBC source connector get the data from a Postgres database and import them inside a topic Kafka. Then transforms the data with KSQL and the result is uploaded to a MySQL database using a JDBC sink connector.  
+- ***ksql***: it uses a Kafka Connect JDBC source connector (producer) to import the data from a Postgres database into a Kafka topic. Then transforms the data with KSQL and the result is uploaded to a MySQL database using a JDBC sink connector (consumer).
+
+- ***ksql-exercises***: it uses a Kafka Connect JDBC source connector (producer) to import the data from a Postgres database into a Kafka topic. In the README there are various examples of the various type of queries that can be issued on ksqlDB, including creating streams and tables.
 
 Each branch has its own README files which explains in details what the applications have been developed for and how to use them.
